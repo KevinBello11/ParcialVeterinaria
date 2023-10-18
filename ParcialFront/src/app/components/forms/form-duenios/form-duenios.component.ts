@@ -25,7 +25,7 @@ export class FormDueñosComponent {
   infoDueños: dueñosModels = {
     Nombre:"",
     Apellido:"",
-    Telefono:"",
+    Telefono: 0,
     Direccion: "",
   };
 

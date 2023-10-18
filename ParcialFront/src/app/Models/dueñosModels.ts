@@ -1,6 +1,6 @@
 export class dueñosModels {
     Nombre: string;
     Apellido: string; 
-    Telefono: string;
+    Telefono: number;
     Direccion: string;
 }
