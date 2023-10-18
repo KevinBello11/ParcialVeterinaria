@@ -1,0 +1,49 @@
+<form [formGroup]="dueniosForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="shipping-card">
+        <mat-card-header>
+            <mat-card-title>Registrar Dueños</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Nombre" formControlName="Nombre">
+                        <mat-error *ngIf="dueniosForm.controls['Nombre'].hasError('required')">
+                            El nombre del dueño es <strong>Requerido</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            <div class="col">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Apellido" formControlName="Apellido">
+                    <mat-error *ngIf="dueniosForm.controls['Apellido'].hasError('required')">
+                        El nombre del dueño es <strong>Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Teléfono" formControlName="Teléfono" type="number" maxlength="10">
+                        <mat-error *ngIf="dueniosForm.controls['Teléfono'].hasError('required')">
+                            El número de teléfono es <strong>Requerido</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Dirección" formControlName="Dirección">
+                        <mat-error *ngIf="dueniosForm.controls['Dirección'].hasError('required')">
+                            La dirección es <strong>Requerida</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit">Crear</button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-card-actions>
+    </mat-card>
+</form>

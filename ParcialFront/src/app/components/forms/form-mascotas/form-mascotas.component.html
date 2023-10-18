@@ -1,0 +1,52 @@
+<form [formGroup]="mascotasForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="shipping-card">
+        <mat-card-header>
+            <mat-card-title>Registrar Mascotas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Nombre" formControlName="Nombre">
+                        <mat-error *ngIf="mascotasForm.controls['Nombre'].hasError('required')">
+                            El nombre de la mascota es <strong>Requerido</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            
+            <div class="col">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Especie" formControlName="Especie">
+                    <mat-error *ngIf="mascotasForm.controls['Especie'].hasError('required')">
+                        El tipo de especie es <strong>Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Raza" formControlName="Raza">
+                        <mat-error *ngIf="mascotasForm.controls['Raza'].hasError('required')">
+                            La raza es <strong>Requerida</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput [matDatepicker]="picker" placeholder="Fecha" formControlName="Fecha">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="mascotasForm.controls['Fecha'].hasError('required')">
+                            La fecha es <strong>Requerida</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit">Crear</button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-card-actions>
+    </mat-card>
+</form>
