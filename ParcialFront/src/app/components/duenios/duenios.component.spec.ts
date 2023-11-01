@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ComidaComponent } from './comida.component';
+import { DueniosComponent } from './duenios.component';
 
-describe('ComidaComponent', () => {
-  let component: ComidaComponent;
-  let fixture: ComponentFixture<ComidaComponent>;
+describe('DueniosComponent', () => {
+  let component: DueniosComponent;
+  let fixture: ComponentFixture<DueniosComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ComidaComponent]
+      declarations: [DueniosComponent]
     });
-    fixture = TestBed.createComponent(ComidaComponent);
+    fixture = TestBed.createComponent(DueniosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

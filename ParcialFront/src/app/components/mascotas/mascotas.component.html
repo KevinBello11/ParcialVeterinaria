@@ -7,33 +7,35 @@
   <button mat-button (click)="openDialog()" class="btn-create">Crear Mascota</button>
 </div>
 
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
 
-    <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-      <div *ngIf="column!='Acciones'">
-        <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </mat-header-cell>
-        <mat-cell mat-cell *matCellDef="let element">{{element[column]}} </mat-cell>
-      </div>
-      <div *ngIf="column=='Acciones'">
-        <mat-header-cell mat-header-cell *matHeaderCellDef>{{column}}</mat-header-cell>
-        <mat-cell mat-cell *matCellDef="let element">
-          <a class="optcion"><i class='material-symbols-outlined'></i></a>
-          <a class="optcion"><i class="fa-solid fa-delete-left"></i></a>
-        </mat-cell>
-      </div>
-    </ng-container>
+  <div class="mat-elevation-z8">
+    <table class="tabla1" mat-table [dataSource]="dataSource" matSort>
+  
+      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+        <div *ngIf="column!='Acciones'">
+          <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{columnHeaders[column]}} </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element">{{element[column]}} </mat-cell>
+        </div>
+        <div *ngIf="column=='Acciones'">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>{{column}}</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element">
+            <a class="btn-acciones"><i class='bx bx-edit-alt'></i></a>
+            <a class="btn-acciones"  (click)="removeMascota(element)"><i class='bx bx-trash'></i></a>
+          </mat-cell>
+        </div>
+      </ng-container>
+  
+  
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  </div>
 
-
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-    <!-- Row shown when there is no matching data. -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-    </tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-</div>

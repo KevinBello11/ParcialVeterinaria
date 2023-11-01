@@ -12,9 +12,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
-import { ComidaComponent } from './components/comida/comida.component';
 import { MascotasComponent } from './components/mascotas/mascotas.component';
-import { DueñoComponent } from './components/dueño/dueño.component';
+
 import { HttpClientModule } from '@angular/common/http';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -30,7 +29,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormComidasComponent } from './components/forms/form-comida/form-comida.component';
-import { FormDueñosComponent } from './components/forms/form-duenios/form-duenios.component';
+import { ComidasComponent } from './components/comidas/comidas.component';
+import { FormDueniosComponent } from './components/forms/form-duenios/form-duenios.component';
+import { DueniosComponent } from './components/duenios/duenios.component';
+
 
 
 
@@ -39,13 +41,13 @@ import { FormDueñosComponent } from './components/forms/form-duenios/form-dueni
   declarations: [
     AppComponent,
     MenuComponent,
-    ComidaComponent,
+    ComidasComponent,
     MascotasComponent,
-    DueñoComponent,
     FormExComponent,
     FormMascotasComponent,
     FormComidasComponent,
-    FormDueñosComponent,
+    FormDueniosComponent,
+    DueniosComponent,
   ],
 
   imports: [

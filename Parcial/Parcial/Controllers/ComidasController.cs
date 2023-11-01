@@ -11,16 +11,16 @@ namespace Parcial.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComidaController : ControllerBase
+    public class ComidasController : ControllerBase
     {
         private readonly VeterinariaContext _context;
 
-        public ComidaController(VeterinariaContext context)
+        public ComidasController(VeterinariaContext context)
         {
             _context = context;
         }
 
-        // GET: api/Comida
+        // GET: api/Comidas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comidum>>> GetComida()
         {
@@ -31,7 +31,7 @@ namespace Parcial.Controllers
             return await _context.Comida.ToListAsync();
         }
 
-        // GET: api/Comida/5
+        // GET: api/Comidas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Comidum>> GetComidum(int id)
         {
@@ -49,12 +49,12 @@ namespace Parcial.Controllers
             return comidum;
         }
 
-        // PUT: api/Comida/5
+        // PUT: api/Comidas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutComidum(int id, Comidum comidum)
         {
-            if (id != comidum.IdComida)
+            if (id != comidum.Id)
             {
                 return BadRequest();
             }
@@ -80,7 +80,7 @@ namespace Parcial.Controllers
             return NoContent();
         }
 
-        // POST: api/Comida
+        // POST: api/Comidas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Comidum>> PostComidum(Comidum comidum)
@@ -90,12 +90,26 @@ namespace Parcial.Controllers
               return Problem("Entity set 'VeterinariaContext.Comida'  is null.");
           }
             _context.Comida.Add(comidum);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (ComidumExists(comidum.Id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            return CreatedAtAction("GetComidum", new { id = comidum.IdComida }, comidum);
+            return CreatedAtAction("GetComidum", new { id = comidum.Id }, comidum);
         }
 
-        // DELETE: api/Comida/5
+        // DELETE: api/Comidas/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComidum(int id)
         {
@@ -117,7 +131,7 @@ namespace Parcial.Controllers
 
         private bool ComidumExists(int id)
         {
-            return (_context.Comida?.Any(e => e.IdComida == id)).GetValueOrDefault();
+            return (_context.Comida?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

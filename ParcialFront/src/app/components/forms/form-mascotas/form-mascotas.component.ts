@@ -28,7 +28,7 @@ export class FormMascotasComponent {
     Nombre:"",
     Especie:"",
     Raza:"",
-    FechaDeNacimiento: new Date (),
+    FechaNacimiento: new Date (),
   };
 
   onSubmit(): void {
@@ -36,7 +36,7 @@ export class FormMascotasComponent {
       this.infoMascotas.Nombre = this.mascotasForm.controls['Nombre'].value;
       this.infoMascotas.Especie = this.mascotasForm.controls['Especie'].value;
       this.infoMascotas.Raza = this.mascotasForm.controls['Raza'].value;
-      this.infoMascotas.FechaDeNacimiento = this.mascotasForm.controls['Fecha'].value;
+      this.infoMascotas.FechaNacimiento = this.mascotasForm.controls['Fecha'].value;
 
       this.dialog.closeAll();
       this.apiService.post('Mascotas', this.infoMascotas).then(res=>{

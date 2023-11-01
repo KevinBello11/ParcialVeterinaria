@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { dueñosModels } from 'src/app/Models/dueñosModels';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { dueniosModels } from 'src/app/Models/dueniosModels';
 import { ApiService } from 'src/app/Services/api.service';
+import { ModalService } from 'src/app/modal/modal.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,38 +12,66 @@ import Swal from 'sweetalert2';
   templateUrl: './form-duenios.component.html',
   styleUrls: ['./form-duenios.component.css']
 })
-export class FormDueñosComponent {
+export class FormDueniosComponent {
   private fb = inject(FormBuilder);
+  dataSource: any;
 
-  constructor(public dialog:MatDialog, public apiService: ApiService){}
+  constructor(
+    public dialog: MatDialog,
+    public apiService: ApiService,
+    public modalService: ModalService,
+    @Inject(MAT_DIALOG_DATA) public data: any // Utiliza MAT_DIALOG_DATA para obtener los datos
+  ) {
+    this.dataSource = new MatTableDataSource();
 
-  dueniosForm = this.fb.group({
-    Nombre: [null, [Validators.required, Validators.maxLength(60)]], 
+    if (data) {
+      this.dueniosForms.setValue({
+        Nombre: data.nombre, 
+        Apellido: data.apellido, 
+        Telefono: data.telefono, 
+        Direccion: data.direccion, 
+      });
+      
+      this.titulo = this.modalService.titulo;
+      this.acciones = this.modalService.acciones.value;
+    }
+  }
+
+
+
+  dueniosForms = this.fb.group({
+    Nombre: [null, [Validators.required, Validators.maxLength(30)]], 
     Apellido:  [null, [Validators.required, Validators.maxLength(30)]],
-    Telefono:  [null, [Validators.required, Validators.maxLength(30)]],
-    Direccion: [null, [Validators.required, Validators.maxLength(60)]], 
+    Telefono:  [null, [Validators.required, Validators.maxLength(10)]],
+    Direccion: [null, [Validators.required, Validators.maxLength(80)]],
   });
 
-  infoDueños: dueñosModels = {
+  infoDuenios: dueniosModels = {
     Nombre:"",
     Apellido:"",
-    Telefono: 0,
+    Telefono:0,
     Direccion: "",
   };
 
+  titulo=""
+  acciones=""
+
   onSubmit(): void {
-    if (this.dueniosForm.valid) {
-      this.infoDueños.Nombre = this.dueniosForm.controls['Nombre'].value;
-      this.infoDueños.Apellido = this.dueniosForm.controls['Apellido'].value;
-      this.infoDueños.Telefono = this.dueniosForm.controls['Telefono'].value;
-      this.infoDueños.Direccion = this.dueniosForm.controls['Direccion'].value;
+    this.titulo=this.modalService.titulo
+    this.acciones=this.modalService.acciones.value
+
+    if (this.dueniosForms.valid) {
+      this.infoDuenios.Nombre = this.dueniosForms.controls['Nombre'].value;
+      this.infoDuenios.Apellido = this.dueniosForms.controls['Apellido'].value;
+      this.infoDuenios.Telefono = this.dueniosForms.controls['Telefono'].value;
+      this.infoDuenios.Direccion = this.dueniosForms.controls['Direccion'].value;
 
       this.dialog.closeAll();
-      this.apiService.post('Dueños', this.infoDueños).then(res=>{
+      this.apiService.post('Duenios', this.infoDuenios).then(res=>{
         if (res == undefined) {
           Swal.fire({
             title: 'Creacion Realizada',
-            text: 'El duesño ha sido creada',
+            text: 'El dueño ha sido creado',
             icon: 'success',
             color: '#716add',
           })

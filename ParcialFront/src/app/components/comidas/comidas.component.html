@@ -1,4 +1,4 @@
-<mat-form-field>
+<mat-form-field class="filtro">
     <mat-label>Filtro</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Comida para gatos" #input>
   </mat-form-field>
@@ -12,14 +12,14 @@
 
       <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
       <div *ngIf="column!='Acciones'">
-        <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </mat-header-cell>
+        <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{columnHeaders[column]}} </mat-header-cell>
         <mat-cell mat-cell *matCellDef="let element">{{element[column]}} </mat-cell>
       </div>
       <div *ngIf="column=='Acciones'">
         <mat-header-cell mat-header-cell *matHeaderCellDef>{{column}}</mat-header-cell>
         <mat-cell mat-cell *matCellDef="let element">
-          <a class="optcion"><i class='material-symbols-outlined'></i></a>
-          <a class="optcion"><i class="fa-solid fa-delete-left"></i></a>
+          <a class="btn-acciones" (click)="editarComida(element)"><i class='bx bx-edit-alt'></i></a>
+            <a class="btn-acciones"  (click)="removeComida(element)"><i class='bx bx-trash'></i></a>
         </mat-cell>
       </div>
     </ng-container>

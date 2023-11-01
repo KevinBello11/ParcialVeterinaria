@@ -1,6 +1,6 @@
-export class dueñosModels {
+export class dueniosModels {
     Nombre: string;
-    Apellido: string; 
+    Apellido: string;
     Telefono: number;
     Direccion: string;
 }
