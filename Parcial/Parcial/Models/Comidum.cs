@@ -5,9 +5,9 @@ namespace Parcial.Models;
 
 public partial class Comidum
 {
-    public int IdComida { get; set; }
+    public int Id { get; set; }
 
-    public string Nombre { get; set; } = null!;
+    public string? Nombre { get; set; }
 
     public string? Tipo { get; set; }
 

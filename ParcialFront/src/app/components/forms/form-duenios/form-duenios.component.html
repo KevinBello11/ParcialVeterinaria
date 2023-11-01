@@ -1,0 +1,49 @@
+<form [formGroup]="dueniosForms" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="shipping-card">
+        <mat-card-header>
+            <mat-card-title>{{titulo}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Nombre" formControlName="Nombre">
+                        <mat-error *ngIf="dueniosForms.controls['Nombre'].hasError('required')">
+                            El nombre del dueño es <strong>Requerido</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            <div class="col">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Apellido" formControlName="Apellido">
+                    <mat-error *ngIf="dueniosForms.controls['Apellido'].hasError('required')">
+                        El apellido del dueño es <strong>Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Teléfono" formControlName="Telefono">
+                        <mat-error *ngIf="dueniosForms.controls['Telefono'].hasError('required')">
+                            El Teléfono del dueño es <strong>Requerido</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Dirección" formControlName="Direccion">
+                        <mat-error *ngIf="dueniosForms.controls['Direccion'].hasError('required')">
+                            La dirección del dueño es <strong>Requerida</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit">{{acciones}}</button>
+            <button mat-button mat-dialog-close>Cancel</button>
+        </mat-card-actions>
+    </mat-card>
+</form>

@@ -15,3 +15,13 @@
   top: 0;
   z-index: 1;
 }
+
+mat-sidenav-content {
+  scroll-behavior: smooth;
+}
+
+.header-menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
