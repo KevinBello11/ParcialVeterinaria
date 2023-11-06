@@ -19,5 +19,5 @@ export class ModalService {
 
     titulo = "";
     acciones = new BehaviorSubject('');
-    constructor(){}
+    constructor(){ }
 }

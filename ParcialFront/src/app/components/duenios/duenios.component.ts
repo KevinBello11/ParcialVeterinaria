@@ -34,12 +34,12 @@ export class DueniosComponent implements OnInit {
 
 
   constructor(public apiService: ApiService, public dialog: MatDialog, public modalService: ModalService) {
-    this.dataSource = new MatTableDataSource();
+    this.dataSource = new MatTableDataSource()
   }
 
   ngOnInit(): void {
-    this.apiService.Get("Duenios").then((res) => {
-      this.dataSource.data = res;
+    this.apiService.Get('Duenios').then(res=>{
+      return this.dataSource.data = res;
     })
   }
 
@@ -58,26 +58,23 @@ export class DueniosComponent implements OnInit {
   }
 
   openDialog() {
-    this.modalService.acciones.next("Crear Dueño");
-    this.accion = "Crear Dueño";
     this.dialog.open(FormDueniosComponent, {
-      height: 'auto',
-      width: 'auto'
+      width: '60%',
     });
   }
-  
+
   editarDuenio(element: any) {
     this.modalService.acciones.next("Editar Dueño");
-    this.modalService.duenios = element;
-    this.accion = "Editar Dueño";
+    this.accion = "Editar Dueño";  
+
     this.dialog.open(FormDueniosComponent, {
       height: 'auto',
       width: 'auto',
-      data: element // Pasa los datos del dueño como entrada
+      data: element // El objeto 'element' ahora contiene los datos del dueño a editar
     });
   }
-  
-  removeDuenios(duenio) {
+
+  removeDuenio(duenio) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'Esta acción eliminará el dueño. No podrás deshacerla.',
@@ -90,11 +87,12 @@ export class DueniosComponent implements OnInit {
       if (result.isConfirmed) {
         this.apiService.delete('Duenios', duenio.id).then((res) => {
           this.ngOnInit();
-          Swal.fire('Dueño Eliminado', 'El dueño ha sido eliminado.', 'success');
+          Swal.fire('Dueño Eliminada', 'El deuño ha sido eliminada.', 'success');
         });
       }
     });
   }
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -104,5 +102,5 @@ export class DueniosComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
+  
 }

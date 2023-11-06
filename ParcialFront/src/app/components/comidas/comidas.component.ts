@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/Services/api.service';
 import { FormComidasComponent } from '../forms/form-comida/form-comida.component';
 import Swal from 'sweetalert2';
+import { ModalService } from 'src/app/modal/modal.service';
 
 @Component({
   selector: 'app-comidas',
@@ -18,7 +19,6 @@ export class ComidasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-  modalService: any;
 
   columnHeaders = {
 
@@ -29,13 +29,15 @@ export class ComidasComponent implements OnInit {
     acciones: 'Acciones',
   };
 
-  constructor(public apiService: ApiService, public dialog: MatDialog) {
+  accion: string = "Crear Comida";
+
+  constructor(public apiService: ApiService, public dialog: MatDialog, public modalService: ModalService) {
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
-    this.apiService.Get("Comidas").then((res) => {
-      this.dataSource.data = res;
+    this.apiService.Get('Comidas').then(res=>{
+      return this.dataSource.data = res;
     })
   }
 
@@ -43,36 +45,36 @@ export class ComidasComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  loadTable (data: any[]){
-    this.displayedColumns=[];
+
+  loadTable(data: any[]) {
+    this.displayedColumns = [];
     for (let column in data[0]) {
       this.displayedColumns.push(column);
     }
-    this. displayedColumns.push('acciones');
+    this.displayedColumns.push('acciones');
 
   }
 
   openDialog() {
-    this.modalService.accion.next("Crear Comida");
     this.dialog.open(FormComidasComponent, {
-      height: 'auto',
-      width: 'auto'
+      width: '60%',
     });
   }
 
   editarComida(element: any) {
     this.modalService.acciones.next("Editar Comida");
-    this.modalService.comida = element;
+    this.modalService.comidas = element;
     this.dialog.open(FormComidasComponent, {
       height: 'auto',
-      width: 'auto'
+      width: 'auto',
+      data: element // El objeto 'element' ahora contiene los datos del dueño a editar
     });
   }
 
   removeComida(comida) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará el producto. No podrás deshacerla.',
+      text: 'Esta acción eliminará la mascota. No podrás deshacerla.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -82,11 +84,12 @@ export class ComidasComponent implements OnInit {
       if (result.isConfirmed) {
         this.apiService.delete('Comidas', comida.id).then((res) => {
           this.ngOnInit();
-          Swal.fire('Producto Eliminado', 'El producto ha sido eliminado.', 'success');
+          Swal.fire('Comida Eliminada', 'La Comida ha sido eliminada.', 'success');
         });
       }
     });
   }
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -96,4 +99,5 @@ export class ComidasComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  
 }

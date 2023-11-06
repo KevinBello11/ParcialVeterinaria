@@ -37,8 +37,6 @@ export class FormDueniosComponent {
     }
   }
 
-
-
   dueniosForms = this.fb.group({
     Nombre: [null, [Validators.required, Validators.maxLength(30)]], 
     Apellido:  [null, [Validators.required, Validators.maxLength(30)]],

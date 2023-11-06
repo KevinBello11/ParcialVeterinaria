@@ -1,6 +1,6 @@
 export class comidasModels {
-    Nombre: string;
-    Tipo: string;
-    Precio: number;
-    Descripcion: string;
+    Nombre: String;
+    Tipo: String;
+    Precio: Number;
+    Descripcion: String;
 }

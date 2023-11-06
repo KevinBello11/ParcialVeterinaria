@@ -1,57 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+/* Estilos para la tabla */
+.table-component {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: white;
+  border: 1px solid #ccc; /* Borde de 1px sólido */
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Para que el borde no quede oculto por la sombra */
+  box-sizing: border-box; /* Incluye el borde en el ancho de la tabla */
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-body{
+  border-radius: 15px;
+}
+
+.mat-cell,
+.mat-header-cell {
+  padding: 10px;
+  text-align: left;
+}
+
+/* Estilos para la paginación */
+.mat-paginator {
+  justify-content: center;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  padding: 10px 0;
+  border-radius: 0 0 5px 5px; /* Borde redondeado solo en la parte inferior */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para la fila cuando no hay datos coincidentes */
+.mat-row.mat-row-no-data {
+  background-color: #fafafa;
+}
+
+.mat-cell.mat-cell-no-data {
+  color: #999;
+  font-style: italic;
+}
+
+
+/* Estilos para el campo de búsqueda */
+.search-table {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+}
 
 mat-form-field {
   width: 100%;
 }
 
-.table-component {
-  width: 80%;
-  margin: 0 auto;
+mat-label {
+  color: #25C8FF;
 }
-
-.search-table {
-  width: 80%;
-  margin: 50px auto 0 auto;
-}
-
-.btn-acciones {
-  width: 50px;
-  height: 30px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  background-color: rgb(7, 56, 129);
-  text-align: center;
-  color: white;
-  box-shadow: 3px 3px 10px rgb(46, 46, 46);
-  cursor: pointer;
-}
-
-.container-acciones {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.form-components {
-  margin: 0 auto;
-}
-
-.form-components mat-card-header {
-  width: 100;
-  margin: 20px auto;
-}
-
-.form-components button {
-  width: 20%;
-  margin: 0 auto 20px auto;
-}
-
 
 .registrar {
   z-index: 0;
@@ -62,13 +75,58 @@ mat-form-field {
 }
 
 .registrar .btn-create {
-  background-color: #3f51b5 !important;
-  color: white !important;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(136.89deg, #D3FF0F -24.91%, #7FFF39 80.16%, #1CFF71 112.89%);
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px; /* Reducir el tamaño del botón */
+  margin: 20px auto;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.btn-create:hover {
+  background: linear-gradient(136.89deg, #D3FF0F -24.91%, #7FFF39 80.16%, #1CFF71 112.89%);
+  transform: scale(1.05);
 }
 
 
 
- .mat-elevation-z8{
-  width: 80%;
-  margin: 0 auto;
+/* Estilos para los botones de Acciones */
+.btn-acciones {
+  width: 30px;
+  height: 30px;
+  border: 2px; /* Borde transparente */
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  margin: 4px; /* Aumentar el espacio entre botones */
 }
+
+/* Estilos para el botón de Editar */
+.btn-acciones.btn-edit {
+  background: linear-gradient(136.89deg,#05f0ff -24.91%,#7367ff 80.16%,#963cff 112.89%);
+    color: #fff;
+}
+
+.btn-acciones.btn-edit:hover {
+  background-color: #05f0ff;
+  border-color: #05f0ff;
+}
+
+/* Estilos para el botón de Eliminar */
+.btn-acciones.btn-remove {
+  background: linear-gradient(284.38deg,#911712,#dc0714);
+  color: white;
+}
+
+.btn-acciones.btn-remove:hover {
+  background-color: #d32f2f;
+  border-color: #d32f2f; /* Agregar borde al pasar el mouse */
+}
+

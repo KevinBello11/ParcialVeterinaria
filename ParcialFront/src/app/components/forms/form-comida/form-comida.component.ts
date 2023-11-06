@@ -1,6 +1,7 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Inject, Input, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { comidasModels } from 'src/app/Models/comidasModels';
 import { ApiService } from 'src/app/Services/api.service';
 import { ModalService } from 'src/app/modal/modal.service';
@@ -13,8 +14,13 @@ import Swal from 'sweetalert2';
 })
 export class FormComidasComponent {
   private fb = inject(FormBuilder);
-  @Input() datosDueño: any;
-  constructor(public dialog: MatDialog, public apiService: ApiService, public modalService: ModalService) {}
+  dataSource: any;
+
+  constructor(
+    public dialog: MatDialog,
+    public apiService: ApiService,
+    public modalService: ModalService // Utiliza MAT_DIALOG_DATA para obtener los datos
+  ) { }
 
   comidasForm = this.fb.group({
     Nombre: [null, [Validators.required, Validators.maxLength(60)]],
@@ -28,20 +34,23 @@ export class FormComidasComponent {
     Tipo: "",
     Precio: 0,
     Descripcion: "",
-    
+
   };
-  titulo=""
-  acciones=""
+
+  controller = 'Comidas';
+
+  titulo = ""
+  acciones = ""
+
   onSubmit(): void {
     this.titulo=this.modalService.titulo
     this.acciones=this.modalService.acciones.value
 
-    if (this.modalService.acciones.value == 'Editar Solicitud') {
+    if (this.comidasForm.valid) {
       this.infoComidas.Nombre = this.comidasForm.controls['Nombre'].value;
-      this.infoComidas.Tipo = this.comidasForm.controls['Tipo'].value;
-      this.infoComidas.Precio = this.comidasForm.controls['Precio'].value;
-      this.infoComidas.Descripcion = this.comidasForm.controls['Descripcion'].value;
-      
+      this.infoComidas.Tipo = this.comidasForm.controls['Apellido'].value;
+      this.infoComidas.Precio = this.comidasForm.controls['Telefono'].value;
+      this.infoComidas.Descripcion = this.comidasForm.controls['Direccion'].value;
 
       this.dialog.closeAll();
       this.apiService.post('Comidas', this.infoComidas).then(res => {
@@ -76,5 +85,4 @@ export class FormComidasComponent {
       });
     }
   }
-  
 }

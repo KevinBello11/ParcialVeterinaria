@@ -10,12 +10,6 @@
   background: inherit;
 }
 
-.mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
 mat-sidenav-content {
   scroll-behavior: smooth;
 }
@@ -25,3 +19,18 @@ mat-sidenav-content {
   display: flex;
   justify-content: space-between;
 }
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-image: url('https://www.premierleague.com/resources/rebrand/v7.131.3/i/elements/backgrounds/primary-bg-with-graphic.svg'); /* Enlace a tu imagen SVG */
+  background-size: cover; /* Ajusta el tamaño de la imagen de fondo según tus necesidades */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-position: center; /* Centra la imagen en el mat-toolbar */
+  color: white; /* Cambia el color del texto si es necesario */
+  --mat-toolbar-container-background-color: #5a607d;
+  --mat-toolbar-container-text-color: white;
+  /* Otros estilos para la clase .mat-toolbar.mat-primary */
+}
+
