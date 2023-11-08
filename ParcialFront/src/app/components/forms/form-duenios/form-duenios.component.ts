@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./form-duenios.component.css']
 })
 export class FormDueniosComponent {
-  private fb = inject(FormBuilder);
+  private fb = new FormBuilder(); // Usar "new FormBuilder()" en lugar de "inject(FormBuilder)"
   dataSource: any;
 
   constructor(
@@ -26,67 +26,86 @@ export class FormDueniosComponent {
 
     if (data) {
       this.dueniosForms.setValue({
-        Nombre: data.nombre, 
-        Apellido: data.apellido, 
-        Telefono: data.telefono, 
-        Direccion: data.direccion, 
+        Nombre: data.nombre,
+        Apellido: data.apellido,
+        Telefono: data.telefono,
+        Direccion: data.direccion,
       });
-      
+
       this.titulo = this.modalService.titulo;
       this.acciones = this.modalService.acciones.value;
     }
   }
 
   dueniosForms = this.fb.group({
-    Nombre: [null, [Validators.required, Validators.maxLength(30)]], 
-    Apellido:  [null, [Validators.required, Validators.maxLength(30)]],
-    Telefono:  [null, [Validators.required, Validators.maxLength(10)]],
+    Nombre: [null, [Validators.required, Validators.maxLength(30)]],
+    Apellido: [null, [Validators.required, Validators.maxLength(30)]],
+    Telefono: [null, [Validators.required, Validators.maxLength(10)]],
     Direccion: [null, [Validators.required, Validators.maxLength(80)]],
   });
 
   infoDuenios: dueniosModels = {
-    Nombre:"",
-    Apellido:"",
-    Telefono:0,
+    Nombre: "",
+    Apellido: "",
+    Telefono: 0,
     Direccion: "",
   };
 
-  titulo=""
-  acciones=""
+  titulo = "";
+  acciones = "";
 
   onSubmit(): void {
-    this.titulo=this.modalService.titulo
-    this.acciones=this.modalService.acciones.value
+    this.titulo = this.modalService.titulo;
+    this.acciones = this.modalService.acciones.value;
 
     if (this.dueniosForms.valid) {
-      this.infoDuenios.Nombre = this.dueniosForms.controls['Nombre'].value;
-      this.infoDuenios.Apellido = this.dueniosForms.controls['Apellido'].value;
-      this.infoDuenios.Telefono = this.dueniosForms.controls['Telefono'].value;
-      this.infoDuenios.Direccion = this.dueniosForms.controls['Direccion'].value;
+      this.infoDuenios.Nombre = this.dueniosForms.get('Nombre').value;
+      this.infoDuenios.Apellido = this.dueniosForms.get('Apellido').value;
+      this.infoDuenios.Telefono = this.dueniosForms.get('Telefono').value;
+      this.infoDuenios.Direccion = this.dueniosForms.get('Direccion').value;
 
-      this.dialog.closeAll();
-      this.apiService.post('Duenios', this.infoDuenios).then(res=>{
-        if (res == undefined) {
+      if (this.acciones === "Crear Dueño") {
+        // Modo de creación
+        this.apiService.create('Duenios', this.infoDuenios).subscribe((res: any) => {
           Swal.fire({
-            title: 'Creacion Realizada',
+            title: 'Creación Realizada',
             text: 'El dueño ha sido creado',
             icon: 'success',
             color: '#716add',
-          })
-        }
-      }).catch(error=>{
-        Swal.fire(
-          `Status error ${error.status}`,
-          `Message: ${error.message}`,
-          `error`
-        )
-      })
-    }else{
+          });
+          this.dialog.closeAll();
+        }, (error) => {
+          Swal.fire(
+            'Error',
+            'Hubo un error al crear el dueño',
+            'error'
+          );
+        });
+      } else if (this.acciones === "Editar Dueño") {
+        // Modo de edición
+        // Aquí debes llamar a la función que actualiza los datos existentes en lugar de crear uno nuevo
+        this.apiService.update('Duenios', this.data.id, this.infoDuenios).subscribe((res: any) => {
+          Swal.fire({
+            title: 'Actualización Realizada',
+            text: 'El dueño ha sido actualizado',
+            icon: 'success',
+            color: '#716add',
+          });
+          this.dialog.closeAll();
+        }, (error) => {
+          Swal.fire(
+            'Error',
+            'Hubo un error al actualizar el dueño',
+            'error'
+          );
+        });
+      }
+    } else {
       Swal.fire(
         'Ingresar los datos',
         'Por favor ingrese todos los campos requeridos',
         'error'
-      )
+      );
     }
   }
 }

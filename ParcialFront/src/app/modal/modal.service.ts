@@ -8,16 +8,15 @@ import { comidasModels } from "../Models/comidasModels";
 
 @Injectable({
     providedIn: 'root'
-})
-
-
-export class ModalService {
-
-    duenios:dueniosModels;
-    mascotas:mascotasModels;
-    comidas:comidasModels;
-
+  })
+  export class ModalService {
+    duenios: dueniosModels;
+    mascotas: mascotasModels;
+    comidas: comidasModels;
+  
     titulo = "";
     acciones = new BehaviorSubject('');
-    constructor(){ }
-}
+  
+    constructor() {}
+  }
+  

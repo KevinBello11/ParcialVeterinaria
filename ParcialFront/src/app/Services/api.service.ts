@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -39,13 +40,18 @@ export class ApiService {
     });
   }
 
-  public async update ( gatewayController: string , body: any, idBody:  string ){
-    return await this.api.put(this.apiUrl+gatewayController+'/'+idBody, body);
-  }
-
   public async put(gatewayController: string, body: any, idBody: string) {
     return await this.api.put(this.apiUrl + gatewayController + '/' + idBody, body).toPromise().then(res => {
       console.log(res);
     });
+  }
+
+  create(controller: string, body: any) {
+    return this.api.post(controller, body);
+  }
+
+  update(controller: string, id: string, body: any) {
+    return this.api.put(this.apiUrl + controller + "/" + id, body);
+
   }
 }

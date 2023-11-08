@@ -7,6 +7,7 @@ import { ApiService } from 'src/app/Services/api.service';
 import { FormDueniosComponent } from '../forms/form-duenios/form-duenios.component';
 import Swal from 'sweetalert2';
 import { ModalService } from 'src/app/modal/modal.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-duenios',
@@ -19,7 +20,6 @@ export class DueniosComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
-
 
   columnHeaders = {
 
@@ -48,16 +48,18 @@ export class DueniosComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  loadTable(data: any[]) {
-    this.displayedColumns = [];
-    for (let column in data[0]) {
-      this.displayedColumns.push(column);
-    }
-    this.displayedColumns.push('acciones');
-
+  loadData() {
+    from(this.apiService.Get('Duenios')).subscribe((res: any) => {
+      this.dataSource.data = res;
+    }, (error) => {
+      console.error('Error al cargar los datos', error);
+    });
   }
+  
 
   openDialog() {
+    this.modalService.acciones.next("Crear Dueño");
+    this.accion = "Crear Dueño";  
     this.dialog.open(FormDueniosComponent, {
       width: '60%',
     });

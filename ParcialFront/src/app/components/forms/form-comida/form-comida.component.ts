@@ -1,7 +1,6 @@
-import { Component, Inject, Input, inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { comidasModels } from 'src/app/Models/comidasModels';
 import { ApiService } from 'src/app/Services/api.service';
 import { ModalService } from 'src/app/modal/modal.service';
@@ -12,76 +11,74 @@ import Swal from 'sweetalert2';
   templateUrl: './form-comida.component.html',
   styleUrls: ['./form-comida.component.css']
 })
-export class FormComidasComponent {
-  private fb = inject(FormBuilder);
-  dataSource: any;
+export class FormComidasComponent implements OnInit {
+  comidasForm: FormGroup;
 
   constructor(
+    private formBuilder: FormBuilder,
     public dialog: MatDialog,
     public apiService: ApiService,
-    public modalService: ModalService // Utiliza MAT_DIALOG_DATA para obtener los datos
-  ) { }
-
-  comidasForm = this.fb.group({
-    Nombre: [null, [Validators.required, Validators.maxLength(60)]],
-    Tipo: [null, [Validators.required, Validators.maxLength(30)]],
-    Precio: [null, [Validators.required, Validators.maxLength(30)]],
-    Descripcion: [null, [Validators.required, Validators.maxLength(30)]],
-  });
+    public modalService: ModalService
+  ) {
+    this.comidasForm = this.formBuilder.group({
+      Nombre: ['', [Validators.required, Validators.maxLength(60)]],
+      Tipo: ['', [Validators.required, Validators.maxLength(30)]],
+      Precio: [0, [Validators.required]],
+      Descripcion: ['', [Validators.required, Validators.maxLength(100)]],
+    });
+  }
 
   infoComidas: comidasModels = {
-    Nombre: "",
-    Tipo: "",
+    Nombre: '',
+    Tipo: '',
     Precio: 0,
-    Descripcion: "",
-
+    Descripcion: '',
   };
+
+  titulo=""
+  acciones=""
 
   controller = 'Comidas';
 
-  titulo = ""
-  acciones = ""
 
-  onSubmit(): void {
-    this.titulo=this.modalService.titulo
-    this.acciones=this.modalService.acciones.value
+  ngOnInit(): void {
+    if (this.modalService.acciones.value == 'Editar Comida') {
 
-    if (this.comidasForm.valid) {
-      this.infoComidas.Nombre = this.comidasForm.controls['Nombre'].value;
-      this.infoComidas.Tipo = this.comidasForm.controls['Apellido'].value;
-      this.infoComidas.Precio = this.comidasForm.controls['Telefono'].value;
-      this.infoComidas.Descripcion = this.comidasForm.controls['Direccion'].value;
+      this.comidasForm.controls['Nombre'].setValue(
+        this.modalService.comidas.Nombre + ''
+      );
+      this.comidasForm.controls['Tipo'].setValue(
+        this.modalService.comidas.Tipo + ''
+      );
+      this.comidasForm.controls['Precio'].setValue(
+        this.modalService.comidas.Precio + ''
+      );
+      this.comidasForm.controls['Descripcion'].setValue(
+        this.modalService.comidas.Descripcion + ''
+      );
+    }
+  }
 
-      this.dialog.closeAll();
-      this.apiService.post('Comidas', this.infoComidas).then(res => {
-        if (res === undefined) {
-          Swal.fire({
-            title: 'Creación Realizada',
-            text: 'La comida ha sido creada',
-            icon: 'success',
-            customClass: {
-              confirmButton: 'btn btn-success',
-            },
-          });
-        }
-      }).catch(error => {
-        Swal.fire({
-          title: `Error de estado ${error.status}`,
-          text: `Mensaje: ${error.message}`,
-          icon: 'error',
-          customClass: {
-            confirmButton: 'btn btn-danger',
-          },
-        });
+  onSubmit(data: any) {
+    if (this.modalService.acciones.value == 'Crear Comida') {
+      this.infoComidas.Nombre = data.Nombre;
+      this.infoComidas.Tipo = data.Tipo;
+      this.infoComidas.Precio = Number(data.Precio);
+      this.infoComidas.Descripcion = data.Descripcion;
+      console.log(data);
+  
+      this.apiService.update(this.controller, data.Nombre, this.infoComidas).subscribe((resp) => {
+        console.log(resp);
       });
+      
     } else {
-      Swal.fire({
-        title: 'Ingresar los datos',
-        text: 'Por favor ingrese todos los campos requeridos',
-        icon: 'error',
-        customClass: {
-          confirmButton: 'btn btn-danger',
-        },
+      this.infoComidas.Nombre = data.Nombre;
+      this.infoComidas.Tipo = data.Tipo;
+      this.infoComidas.Precio = Number(data.Precio);
+      this.infoComidas.Descripcion = data.Descripcion;
+  
+      this.apiService.update(this.controller, data.Nombre, this.infoComidas).subscribe((resp) => {
+        console.log(resp);
       });
     }
   }

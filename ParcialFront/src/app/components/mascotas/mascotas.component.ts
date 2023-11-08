@@ -56,6 +56,9 @@ export class MascotasComponent implements OnInit{
     }
   
     openDialog() {
+      this.modalService.acciones.next("Crear Mascotas");
+      this.accion = "Crear Mascotas";  
+  
       this.dialog.open(FormMascotasComponent, {
         width: '60%',
       });
@@ -63,7 +66,7 @@ export class MascotasComponent implements OnInit{
   
     editarMascota(element: any) {
       this.modalService.acciones.next("Editar Mascotas");
-      this.accion = "Editar Dueño";  
+      this.accion = "Editar Mascotas";  
   
       this.dialog.open(FormMascotasComponent, {
         height: 'auto',
