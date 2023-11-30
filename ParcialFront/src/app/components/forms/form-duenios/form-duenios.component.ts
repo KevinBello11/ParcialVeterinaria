@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,8 +12,14 @@ import Swal from 'sweetalert2';
   templateUrl: './form-duenios.component.html',
   styleUrls: ['./form-duenios.component.css']
 })
-export class FormDueniosComponent {
-  private fb = new FormBuilder(); // Usar "new FormBuilder()" en lugar de "inject(FormBuilder)"
+export class FormDueniosComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  dueniosForm = this.fb.group({
+    Nombre: [null, [Validators.required, Validators.maxLength(30)]],
+    Tipo: [null, [Validators.required, Validators.max(60)]],
+    Precio: [null, [Validators.required, Validators.maxLength(20)]],
+    Descripcion: [null, [Validators.required, Validators.maxLength(20)]],
+  });
   dataSource: any;
 
   constructor(
@@ -25,87 +31,99 @@ export class FormDueniosComponent {
     this.dataSource = new MatTableDataSource();
 
     if (data) {
-      this.dueniosForms.setValue({
+      this.dueniosForm.setValue({
         Nombre: data.nombre,
-        Apellido: data.apellido,
-        Telefono: data.telefono,
-        Direccion: data.direccion,
+        Tipo: data.tipo,
+        Precio: data.precio,
+        Descripcion: data.descripcion,
       });
-
+      this.idData = data.id
       this.titulo = this.modalService.titulo;
       this.acciones = this.modalService.acciones.value;
     }
   }
 
-  dueniosForms = this.fb.group({
-    Nombre: [null, [Validators.required, Validators.maxLength(30)]],
-    Apellido: [null, [Validators.required, Validators.maxLength(30)]],
-    Telefono: [null, [Validators.required, Validators.maxLength(10)]],
-    Direccion: [null, [Validators.required, Validators.maxLength(80)]],
-  });
-
-  infoDuenios: dueniosModels = {
+  infoduenios: dueniosModels = {
     Nombre: "",
     Apellido: "",
     Telefono: 0,
     Direccion: "",
   };
 
-  titulo = "";
-  acciones = "";
+  titulo = ""
+  acciones = ""
+  idData = ""
+
+  ngOnInit(): void {
+    this.titulo = this.modalService.titulo
+    this.acciones = this.modalService.acciones.value
+  }
 
   onSubmit(): void {
-    this.titulo = this.modalService.titulo;
-    this.acciones = this.modalService.acciones.value;
+    this.titulo = this.modalService.titulo
+    this.acciones = this.modalService.acciones.value
 
-    if (this.dueniosForms.valid) {
-      this.infoDuenios.Nombre = this.dueniosForms.get('Nombre').value;
-      this.infoDuenios.Apellido = this.dueniosForms.get('Apellido').value;
-      this.infoDuenios.Telefono = this.dueniosForms.get('Telefono').value;
-      this.infoDuenios.Direccion = this.dueniosForms.get('Direccion').value;
+    if (this.dueniosForm.valid) {
+      this.infoduenios.Nombre = this.dueniosForm.controls['Nombre'].value;
+      this.infoduenios.Apellido = this.dueniosForm.controls['Apellido'].value;
+      this.infoduenios.Telefono = this.dueniosForm.controls['Telefono'].value;
+      this.infoduenios.Direccion = this.dueniosForm.controls['Direccion'].value;
 
-      if (this.acciones === "Crear Dueño") {
-        // Modo de creación
-        this.apiService.create('Duenios', this.infoDuenios).subscribe((res: any) => {
-          Swal.fire({
-            title: 'Creación Realizada',
-            text: 'El dueño ha sido creado',
-            icon: 'success',
-            color: '#716add',
-          });
-          this.dialog.closeAll();
-        }, (error) => {
+      this.dialog.closeAll();
+      if (this.acciones == "Editar") {
+        var editarComida = {
+          Nombre: this.infoduenios.Nombre,
+          Apellido: this.infoduenios.Apellido,
+          Telefono: this.infoduenios.Telefono,
+          Direccion: this.infoduenios.Direccion,
+          id: this.idData,
+        }
+        console.log(editarComida);
+
+        this.apiService.update('Duenio', editarComida, this.idData).then(res => {
+          if (res == undefined) {
+            Swal.fire({
+              title: 'Edicion Realizada',
+              text: 'El duenio ha sido actualizado ',
+              icon: 'success',
+              color: '#716add',
+            }).then(result=>{
+              if (result.isConfirmed){
+                window.location.reload()
+              }
+            })
+          }
+        }).catch(error => {
           Swal.fire(
-            'Error',
-            'Hubo un error al crear el dueño',
-            'error'
-          );
-        });
-      } else if (this.acciones === "Editar Dueño") {
-        // Modo de edición
-        // Aquí debes llamar a la función que actualiza los datos existentes en lugar de crear uno nuevo
-        this.apiService.update('Duenios', this.data.id, this.infoDuenios).subscribe((res: any) => {
-          Swal.fire({
-            title: 'Actualización Realizada',
-            text: 'El dueño ha sido actualizado',
-            icon: 'success',
-            color: '#716add',
-          });
-          this.dialog.closeAll();
-        }, (error) => {
+            `Status error ${error.status}`,
+            `Message: ${error.message}`,
+            `error`
+          )
+        })
+      } else if (this.acciones == "Crear") {
+        this.apiService.post('Duenios', this.infoduenios).then(res => {
+          if (res == undefined) {
+            Swal.fire({
+              title: 'Creacion Realizada',
+              text: 'El dueño ha sido creada',
+              icon: 'success',
+              color: '#716add',
+            })
+          }
+        }).catch(error => {
           Swal.fire(
-            'Error',
-            'Hubo un error al actualizar el dueño',
-            'error'
-          );
-        });
+            `Status error ${error.status}`,
+            `Message: ${error.message}`,
+            `error`
+          )
+        })
       }
     } else {
       Swal.fire(
         'Ingresar los datos',
         'Por favor ingrese todos los campos requeridos',
         'error'
-      );
+      )
     }
   }
 }

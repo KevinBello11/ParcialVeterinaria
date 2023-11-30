@@ -22,44 +22,44 @@ namespace Parcial.Controllers
 
         // GET: api/Mascotas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Mascota>>> GetMascotas()
+        public async Task<ActionResult<IEnumerable<Mascotum>>> GetMascota()
         {
-          if (_context.Mascotas == null)
+          if (_context.Mascota == null)
           {
               return NotFound();
           }
-            return await _context.Mascotas.ToListAsync();
+            return await _context.Mascota.ToListAsync();
         }
 
         // GET: api/Mascotas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Mascota>> GetMascota(int id)
+        public async Task<ActionResult<Mascotum>> GetMascotum(int id)
         {
-          if (_context.Mascotas == null)
+          if (_context.Mascota == null)
           {
               return NotFound();
           }
-            var mascota = await _context.Mascotas.FindAsync(id);
+            var mascotum = await _context.Mascota.FindAsync(id);
 
-            if (mascota == null)
+            if (mascotum == null)
             {
                 return NotFound();
             }
 
-            return mascota;
+            return mascotum;
         }
 
         // PUT: api/Mascotas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMascota(int id, Mascota mascota)
+        public async Task<IActionResult> PutMascotum(int id, Mascotum mascotum)
         {
-            if (id != mascota.Id)
+            if (id != mascotum.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(mascota).State = EntityState.Modified;
+            _context.Entry(mascotum).State = EntityState.Modified;
 
             try
             {
@@ -67,7 +67,7 @@ namespace Parcial.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MascotaExists(id))
+                if (!MascotumExists(id))
                 {
                     return NotFound();
                 }
@@ -83,20 +83,20 @@ namespace Parcial.Controllers
         // POST: api/Mascotas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Mascota>> PostMascota(Mascota mascota)
+        public async Task<ActionResult<Mascotum>> PostMascotum(Mascotum mascotum)
         {
-          if (_context.Mascotas == null)
+          if (_context.Mascota == null)
           {
-              return Problem("Entity set 'VeterinariaContext.Mascotas'  is null.");
+              return Problem("Entity set 'VeterinariaContext.Mascota'  is null.");
           }
-            _context.Mascotas.Add(mascota);
+            _context.Mascota.Add(mascotum);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (MascotaExists(mascota.Id))
+                if (MascotumExists(mascotum.Id))
                 {
                     return Conflict();
                 }
@@ -106,32 +106,32 @@ namespace Parcial.Controllers
                 }
             }
 
-            return CreatedAtAction("GetMascota", new { id = mascota.Id }, mascota);
+            return CreatedAtAction("GetMascotum", new { id = mascotum.Id }, mascotum);
         }
 
         // DELETE: api/Mascotas/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMascota(int id)
+        public async Task<IActionResult> DeleteMascotum(int id)
         {
-            if (_context.Mascotas == null)
+            if (_context.Mascota == null)
             {
                 return NotFound();
             }
-            var mascota = await _context.Mascotas.FindAsync(id);
-            if (mascota == null)
+            var mascotum = await _context.Mascota.FindAsync(id);
+            if (mascotum == null)
             {
                 return NotFound();
             }
 
-            _context.Mascotas.Remove(mascota);
+            _context.Mascota.Remove(mascotum);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool MascotaExists(int id)
+        private bool MascotumExists(int id)
         {
-            return (_context.Mascotas?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Mascota?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

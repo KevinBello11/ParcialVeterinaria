@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -9,17 +8,17 @@ export class ApiService {
 
   constructor(public api:HttpClient) { }
 
-  apiUrl = "https://localhost:7055/api/";
+  apiUrl = "https://localhost:7007/api/";
 
   public async Get (gatewayController: string){
     var respo:any;
-    await this.api.get(this.apiUrl+gatewayController).toPromise().then(res=>{
-      console.log(res);
-      respo=res
-    }
-    )
+    await this.api.get(this.apiUrl+gatewayController).toPromise().then((res)=>{
+      respo = res;
+    })
+    console.log(respo);
     return respo;
   }
+
   public async getById (gatewayController: string, idBody: string){
     await this.api.get(this.apiUrl+gatewayController+'/'+idBody).toPromise().then((res=>{
       console.log(res);
@@ -28,7 +27,7 @@ export class ApiService {
   }
 
   public async post ( gatewayController: string , body: any ){
-    return await this.api.post(this.apiUrl+gatewayController, body).subscribe((res)=>{
+    return await this.api.post(this.apiUrl+gatewayController, body).toPromise().then((res)=>{
       console.log(res);
     })
   }
@@ -40,18 +39,11 @@ export class ApiService {
     });
   }
 
-  public async put(gatewayController: string, body: any, idBody: string) {
-    return await this.api.put(this.apiUrl + gatewayController + '/' + idBody, body).toPromise().then(res => {
+  public async update ( gatewayController: string , body: any, idBody:  string ){
+    return await this.api.put(this.apiUrl+gatewayController+'/'+idBody, body).toPromise().then(res =>{
       console.log(res);
     });
   }
-
-  create(controller: string, body: any) {
-    return this.api.post(controller, body);
-  }
-
-  update(controller: string, id: string, body: any) {
-    return this.api.put(this.apiUrl + controller + "/" + id, body);
-
-  }
 }
+
+

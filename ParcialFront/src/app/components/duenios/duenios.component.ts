@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,15 +14,14 @@ import { from } from 'rxjs';
   templateUrl: './duenios.component.html',
   styleUrls: ['./duenios.component.css']
 })
-export class DueniosComponent implements OnInit {
-
+export class DueniosComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['nombre', 'apellido', 'telefono', 'direccion', 'acciones'];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
 
-  columnHeaders = {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
+  columnHeaders = {
     nombre: 'Nombre',
     apellido: 'Apellido',
     telefono: 'Teléfono',
@@ -30,17 +29,17 @@ export class DueniosComponent implements OnInit {
     acciones: 'Acciones',
   };
 
-  accion: string = "Crear Dueño";
-
+  acciones: string = 'Crear';
 
   constructor(public apiService: ApiService, public dialog: MatDialog, public modalService: ModalService) {
-    this.dataSource = new MatTableDataSource()
+    this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
-    this.apiService.Get('Duenios').then(res=>{
-      return this.dataSource.data = res;
-    })
+    
+    this.apiService.Get('Duenios').then(res=> {
+      return  this.dataSource.data = res;
+    });
   }
 
   ngAfterViewInit() {
@@ -48,26 +47,16 @@ export class DueniosComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  loadData() {
-    from(this.apiService.Get('Duenios')).subscribe((res: any) => {
-      this.dataSource.data = res;
-    }, (error) => {
-      console.error('Error al cargar los datos', error);
-    });
-  }
-  
-
   openDialog() {
-    this.modalService.acciones.next("Crear Dueño");
-    this.accion = "Crear Dueño";  
+    this.modalService.acciones.next(this.acciones);
     this.dialog.open(FormDueniosComponent, {
       width: '60%',
     });
   }
 
   editarDuenio(element: any) {
-    this.modalService.acciones.next("Editar Dueño");
-    this.accion = "Editar Dueño";  
+    this.modalService.acciones.next("Editar");
+    this.acciones = "Editar";  
 
     this.dialog.open(FormDueniosComponent, {
       height: 'auto',
@@ -79,7 +68,7 @@ export class DueniosComponent implements OnInit {
   removeDuenio(duenio) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará el dueño. No podrás deshacerla.',
+      text: 'Esta acción eliminará el duenño. No podrás deshacerla.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -89,12 +78,11 @@ export class DueniosComponent implements OnInit {
       if (result.isConfirmed) {
         this.apiService.delete('Duenios', duenio.id).then((res) => {
           this.ngOnInit();
-          Swal.fire('Dueño Eliminada', 'El deuño ha sido eliminada.', 'success');
+          Swal.fire('Dueño', 'el dueño ha sido eliminado.', 'success');
         });
       }
     });
   }
-  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -104,5 +92,4 @@ export class DueniosComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  
 }

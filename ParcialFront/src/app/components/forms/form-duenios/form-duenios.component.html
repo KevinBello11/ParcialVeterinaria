@@ -1,4 +1,4 @@
-<form [formGroup]="dueniosForms" novalidate (ngSubmit)="onSubmit()">
+<form [formGroup]="dueniosForm" novalidate (ngSubmit)="onSubmit()"  class="form-components">
     <mat-card class="shipping-card">
         <mat-card-header>
             <mat-card-title>{{titulo}}</mat-card-title>
@@ -8,7 +8,7 @@
                 <div class="col">
                     <mat-form-field class="full-width">
                         <input matInput placeholder="Nombre" formControlName="Nombre">
-                        <mat-error *ngIf="dueniosForms.controls['Nombre'].hasError('required')">
+                        <mat-error *ngIf="dueniosForm.controls['Nombre'].hasError('required')">
                             El nombre del dueño es <strong>Requerido</strong>
                         </mat-error>
                     </mat-form-field>
@@ -16,7 +16,7 @@
             <div class="col">
                 <mat-form-field class="full-width">
                     <input matInput placeholder="Apellido" formControlName="Apellido">
-                    <mat-error *ngIf="dueniosForms.controls['Apellido'].hasError('required')">
+                    <mat-error *ngIf="dueniosForm.controls['Apellido'].hasError('required')">
                         El apellido del dueño es <strong>Requerido</strong>
                     </mat-error>
                 </mat-form-field>
@@ -26,7 +26,7 @@
                 <div class="col">
                     <mat-form-field class="full-width">
                         <input matInput placeholder="Teléfono" formControlName="Telefono">
-                        <mat-error *ngIf="dueniosForms.controls['Telefono'].hasError('required')">
+                        <mat-error *ngIf="dueniosForm.controls['Telefono'].hasError('required')">
                             El Teléfono del dueño es <strong>Requerido</strong>
                         </mat-error>
                     </mat-form-field>
@@ -34,7 +34,7 @@
                 <div class="col">
                     <mat-form-field class="full-width">
                         <input matInput placeholder="Dirección" formControlName="Direccion">
-                        <mat-error *ngIf="dueniosForms.controls['Direccion'].hasError('required')">
+                        <mat-error *ngIf="dueniosForm.controls['Direccion'].hasError('required')">
                             La dirección del dueño es <strong>Requerida</strong>
                         </mat-error>
                     </mat-form-field>

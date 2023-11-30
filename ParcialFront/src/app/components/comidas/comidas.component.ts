@@ -1,44 +1,45 @@
-import { Component, OnInit, ViewChild, } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ApiService } from 'src/app/Services/api.service';
-import { FormComidasComponent } from '../forms/form-comida/form-comida.component';
-import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
 import { ModalService } from 'src/app/modal/modal.service';
+import Swal from 'sweetalert2';
+import { ApiService } from 'src/app/Services/api.service';
+import { FormComidasComponent } from '../forms/form-comidas/form-comidas.component';
+
 
 @Component({
   selector: 'app-comidas',
   templateUrl: './comidas.component.html',
-  styleUrls: ['./comidas.component.css']
+  styleUrls: ['./comidas.component.css'],
 })
-export class ComidasComponent implements OnInit {
-
+export class ComidasComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['nombre', 'tipo', 'precio', 'descripcion', 'acciones'];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource<any>;
 
-  columnHeaders = {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-    nombre:'Nombre',
+  columnHeaders = {
+    nombre: 'Nombre',
     tipo: 'Tipo',
     precio: 'Precio',
     descripcion: 'Descripción',
     acciones: 'Acciones',
   };
 
-  accion: string = "Crear Comida";
+  acciones: string = 'Crear';
 
   constructor(public apiService: ApiService, public dialog: MatDialog, public modalService: ModalService) {
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
-    this.apiService.Get('Comidas').then(res=>{
-      return this.dataSource.data = res;
-    })
+    
+    this.apiService.Get('Comidas').then(res=> {
+      return  this.dataSource.data = res;
+    });
   }
 
   ngAfterViewInit() {
@@ -46,24 +47,17 @@ export class ComidasComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  loadTable(data: any[]) {
-    this.displayedColumns = [];
-    for (let column in data[0]) {
-      this.displayedColumns.push(column);
-    }
-    this.displayedColumns.push('acciones');
-
-  }
-
   openDialog() {
+    this.modalService.acciones.next(this.acciones);
     this.dialog.open(FormComidasComponent, {
       width: '60%',
     });
   }
 
   editarComida(element: any) {
-    this.modalService.acciones.next("Editar Comida");
-    this.modalService.comidas = element;
+    this.modalService.acciones.next("Editar");
+    this.acciones = "Editar";  
+
     this.dialog.open(FormComidasComponent, {
       height: 'auto',
       width: 'auto',
@@ -74,7 +68,7 @@ export class ComidasComponent implements OnInit {
   removeComida(comida) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará la mascota. No podrás deshacerla.',
+      text: 'Esta acción eliminará la comida. No podrás deshacerla.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -84,12 +78,11 @@ export class ComidasComponent implements OnInit {
       if (result.isConfirmed) {
         this.apiService.delete('Comidas', comida.id).then((res) => {
           this.ngOnInit();
-          Swal.fire('Comida Eliminada', 'La Comida ha sido eliminada.', 'success');
+          Swal.fire('Comida Eliminada', 'la comida ha sido eliminada.', 'success');
         });
       }
     });
   }
-  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -99,5 +92,4 @@ export class ComidasComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  
 }
